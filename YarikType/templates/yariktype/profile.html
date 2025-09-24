@@ -1,0 +1,50 @@
+{% extends 'yariktype/base.html' %}
+
+{% block content %}
+
+<div class='profile'>
+	<div class='details'>
+		<div class='bio'>
+			<div class='name'>
+				{{ profile.username }}
+			</div>
+			<div class='joined'>
+				joined {{ profile.creation_date }}
+			</div>
+		</div>
+
+		{% if profile.description %}
+			<div class="spacer"></div>
+
+			<div class='description'>
+				<div class='title'>description</div>
+				<div class='value'>{{ profile.description }}</div>
+			</div>
+		{% endif %}
+		{% if user and user.username == profile.username %}
+			<div class='buttons'>
+				<button class='edit'>Edit</button>
+			</div>
+		{% endif %}
+	</div>
+	<div class='records'>
+		<div class='group'>
+			<div class='title'>15 seconds</div>
+			<div class='wpm'>{{ records_first|default:"-" }}</div>
+		</div>
+		<div class='group'>
+			<div class='title'>30 seconds</div>
+			<div class='wpm'>{{ records_second|default:"-" }}</div>
+		</div>
+		<div class='group'>
+			<div class='title'>60 seconds</div>
+			<div class='wpm'>{{ records_third|default:"-" }}</div>
+		</div>
+		<div class='group'>
+			<div class='title'>120 seconds</div>
+			<div class='wpm'>{{ records_fourth|default:"-" }}</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

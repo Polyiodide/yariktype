@@ -1,0 +1,25 @@
+{% extends 'yariktype/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+	<div class='authpage'>
+		<div class='page{{action}}'>
+			<div class='title'>{{action}}</div>
+			<div class='form'>
+				<form action='{{ action }}' method='post'>
+					{% csrf_token %}
+					{{ form }}
+					{% if action == 'login' %}
+						<input type='submit' value='sign in'>
+					{% else %}
+						<input type='submit' value='sign up'>
+					{% endif %}
+				</form>
+				{% if action == 'login' %}
+					<button id='forgotPasswordButton' class='textButton forgotPassword'>forgot password?</button>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang='en' style='--font: "Roboto Mono", "Roboto Mono", "Vazirmatn", monospace;'>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<meta charset='utf-8'>
+		{% load static %}
+		<link rel='stylesheet' href='{% static "yariktype/style.css" %}'>
+	</head>
+	<body>
+		<script src='{% static "yariktype/load.js" %}'></script>
+		<div id='popups'></div>
+		<div class='app'>
+			{% include 'yariktype/header.html' %}
+			<main>
+				{% block content %}{% endblock %}
+			</main>
+			{% include 'yariktype/footer.html' %}
+		</div>
+		<link id='currentTheme' rel='stylesheet' href='/static/yariktype/themes/classic.css'>
+		<script type="module" src='{% static "yariktype/theme.js" %}'></script>
+	</body>
+</html>

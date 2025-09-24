@@ -1,0 +1,20 @@
+<header>
+	<a class='logo' href='/'>
+		<div class='icon'>
+			{% load static %}
+			<img src='{% static "yariktype/logo.png" %}'>
+		</div>
+		<h1>yariktype</h1>
+	</a>
+	<nav>
+		<a class='textButton' href='/leaderboards'>leaderboards</a>
+		<a class='textButton' href='/settings'>settings</a>
+		{% if user %}
+			<a class='textButton' href='/profile/{{ user.username }}'>{{ user.username }}</a>
+			<a class='textButton' href='/logout'>logout</a>
+		{% else %}
+			<a class='textButton' href='/login'>login</a>
+			<a class='textButton' href='/register'>register</a>
+		{% endif %}
+	</nav>
+</header>

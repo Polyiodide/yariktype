@@ -1,0 +1,29 @@
+{% extends 'yariktype/base.html' %}
+{% block content %}
+	<div class='settingsPage'>
+		<div class='settingsGroup'>
+			<div class='section' data-config-name='fontSize'>
+				<div class='title'><span>font size</span></div>
+				<div class='sectionBody'>
+					<div class='text'>Change the font size of test words</div>
+					<div class='inputs'>
+						<input type='number' placeholder='font size' min=0 value=2>
+					</div>
+				</div>
+			</div>
+
+			<div class='section' data-config-name='fontFamily'>
+				<div class='title'><span>font family</span></div>
+				<div class='sectionBody'>
+					<div class='buttons'>
+						<button style='font-family:Roboto Preview'>Roboto</button>
+						<button style='font-family:Roboto Mono Preview'>Roboto Mono</button>
+						<button style='font-family:Source Code Pro Preview'>Source Code Pro</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% load static %}
+	<script src='{% static "yariktype/settings.js" %}'></script>
+{% endblock %}

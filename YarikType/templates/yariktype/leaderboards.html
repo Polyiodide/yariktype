@@ -1,0 +1,45 @@
+{% extends 'yariktype/base.html' %}
+{% block content %}
+	<div class='leaderboardsPage'>
+		<div class='buttons'>
+			<div class='buttonGroup'>
+				<button>time 15</button>
+				<button>time 30</button>
+				<button>time 60</button>
+				<button>time 120</button>
+			</div>
+		</div>
+
+		<div class='table'>
+			<table>
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>name</td>
+						<td>wmp</td>
+						<td>accuracy</td>
+					</tr>
+				</thead>
+				<tr>
+					<td>1</td>
+					<td class='avatarName'>
+						<div class='avatar'></div>
+						<a href=''>Abame</a>
+					</td>
+					<td>106.79</td>
+					<td>96.39%</td>
+				</tr>
+
+				<tr>
+					<td>2</td>
+					<td class='avatarName'>
+						<div class='avatar'></div>
+						<a href=''>Twails</a>
+					</td>
+					<td>106.79</td>
+					<td>96.39%</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+{% endblock %}

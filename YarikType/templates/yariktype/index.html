@@ -1,0 +1,33 @@
+{% extends 'yariktype/base.html' %}
+
+{% block title %}yariktype{% endblock %}
+
+{% block content %}
+	<div id='config' class='full-width'>
+		<div class='row'>
+			<div class='time'>
+				<button class='textButton configButton' timeconfig='15'>15</button>
+				<button class='textButton configButton active' timeconfig='30'>30</button>
+				<button class='textButton configButton' timeconfig='60'>60</button>
+				<button class='textButton configButton' timeconfig='120'>120</button>
+				<button class='textButton configButton' timeconfig='custom'>custom</button>
+			</div>
+			<div class='spacer'></div>
+			<div class='text'>
+				<button class='textButton configButton'>text</button>
+			</div>
+		</div>
+	</div>
+	<div id='typingTest' style="font-size: 2rem; max-width: 100%; opacity: 1;">
+		<div class='languages'>
+			<button class='textButton'>english</button>
+		</div>
+		<div id='wordsWrapper' style="overflow: visible clip; height: 153px;">
+			<input id='wordsInput' type="text">
+			<div id='caret' style="top: 8px; left: 17px"></div>
+			<div id='words'></div>
+		</div>
+	</div>
+	{% load static %}
+	<script type='module' src='{% static "yariktype/index.js" %}'></script>
+{% endblock %}
