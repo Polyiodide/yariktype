@@ -17,13 +17,13 @@ def login_req(func):
         return func(request, *args, **kwargs)
     return wrapper
 
-def login_redirect(func):
-    def wrapper(request, *args, **kwargs):
+def login_redirect(cls):
+    def get(self, request, *args, **kwargs):
         user = request.session.get('user', None)
         if user: return redirect('profile', user['username'])
-
-        return func(request, *args, **kwargs)
-    return wrapper
+        return super().get(request)
+    cls.get = get
+    return cls
 
 class ContextView(TemplateView):
     extra_context = {}
@@ -45,11 +45,11 @@ def dictionary(request, slug):
     return FileResponse(open('YarikType/static/yariktype/dictionaries/'+slug, "rb"))
 
 def list_users(request):
-    if 'mode' not in request.GET:
+    if 'time' not in request.GET:
         raise PermissionDenied()
 
-    mode = request.GET['mode']
-    match mode:
+    time = request.GET['time']
+    match time:
         case '15':
             mode = 'record_first'
         case '30':
@@ -60,12 +60,11 @@ def list_users(request):
             mode = 'record_fourth'
         case _:
             raise PermissionDenied()
-    print(mode)
 
-    data = {}
+    data = {'users':[]}
     array = models.User.objects.all().order_by(mode)
     for idx, user in enumerate(array):
-        data[idx] = {'wpm': user.record_first, 'username': user.username}
+        data['users'].append({'wpm': user.record_first, 'username': user.username})
     return JsonResponse(data)
 
 class AppView(ContextView):
@@ -97,9 +96,15 @@ def logout(request):
     request.session.clear()
     return redirect('index')
 
-@login_redirect
-def login(request):
-    if request.method == 'POST':
+class LoginView(ContextView):
+    template_name = 'yariktype/auth.html'
+    def get(self, request):
+        self.extra_context['form'] = forms.LoginForm()
+        self.extra_context['title'] = 'Login'
+        self.extra_context['action'] = 'login'
+        return super().get(request)
+
+    def post(self, request):
         form = forms.LoginForm(request.POST)
         if form.is_valid():
             if not models.User.objects.filter(email=form.cleaned_data['email']):
@@ -117,18 +122,18 @@ def login(request):
             request.session['user'] = user
 
             return redirect('index')
-    else:
-        form = forms.LoginForm()
+        self.extra_context['form'] = form
+        return self.get(request)
 
-    context = get_context(request)
-    context['form'] = form
-    context['title'] = 'Login'
-    context['action'] = 'login'
-    return render(request, 'yariktype/auth.html', context=context)
+class RegisterView(ContextView):
+    template_name = 'yariktype/auth.html'
+    def get(self, request):
+        self.extra_context['form'] = forms.RegisterForm()
+        self.extra_context['title'] = 'Register'
+        self.extra_context['action'] = 'register'
+        return super().get(request)
 
-@login_redirect
-def register(request):
-    if request.method == 'POST':
+    def post(self, request):
         form = forms.RegisterForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['email'] != form.cleaned_data['verify_email']:
@@ -149,11 +154,6 @@ def register(request):
             request.session['user'] = user
 
             return redirect('index')
-    else:
-        form = forms.RegisterForm()
+        self.extra_context['form'] = form
+        return self.get(request)
 
-    context = get_context(request)
-    context['form'] = form
-    context['title'] = 'Register'
-    context['action'] = 'register'
-    return render(request, 'yariktype/auth.html', context=context)

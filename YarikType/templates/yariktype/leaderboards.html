@@ -3,10 +3,10 @@
 	<div class='leaderboardsPage'>
 		<div class='buttons'>
 			<div class='buttonGroup'>
-				<button>time 15</button>
-				<button>time 30</button>
-				<button>time 60</button>
-				<button>time 120</button>
+				<button mode=15>time 15</button>
+				<button mode=30>time 30</button>
+				<button mode=60>time 60</button>
+				<button mode=120>time 120</button>
 			</div>
 		</div>
 
@@ -29,17 +29,9 @@
 					<td>106.79</td>
 					<td>96.39%</td>
 				</tr>
-
-				<tr>
-					<td>2</td>
-					<td class='avatarName'>
-						<div class='avatar'></div>
-						<a href=''>Twails</a>
-					</td>
-					<td>106.79</td>
-					<td>96.39%</td>
-				</tr>
 			</table>
 		</div>
 	</div>
+	{% load static %}
+	<script src='{% static "yariktype/leaderboards.js" %}'></script>
 {% endblock %}
