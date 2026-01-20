@@ -1,12 +1,8 @@
 from django.db import models
 
-# Create your models here.
-def records_default():
-    return {15: None, 30: None, 60: None, 120: None}
-
 class User(models.Model):
-    username = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
+    username = models.CharField(max_length=200, unique=True)
+    email = models.CharField(max_length=200, unique=True)
     password = models.CharField(max_length=200)
 
     creation_date = models.DateField(auto_now_add=True)

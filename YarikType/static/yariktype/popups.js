@@ -53,7 +53,7 @@ export const ThemePopup = {
 		// get themes
 		const themes = (await this.get_themes())['themes']
 
-		let popup = '<dialog class="themeChanger modalWrapper"><div class="modal"><div class="suggestions">'
+		let popup = '<dialog id="commandLine" class="themeChanger modalWrapper"><div class="modal"><div class="suggestions">'
 		for (const theme of themes) {
 			popup += `<div class="theme"><div>${theme}</div></div>`
 		}
@@ -108,7 +108,7 @@ export const LangPopup = {
 		// get langs
 		const langs = (await this.get_langs())['dictonaries'];
 
-		let popup = '<dialog class="dictChanger modalWrapper"><div class="modal"><div class="suggestions">'
+		let popup = '<dialog id="commandLine" class="dictChanger modalWrapper"><div class="modal"><div class="suggestions">'
 		for (const lang of langs) {
 			popup += `<div class="dict"><div>${lang}</div></div>`
 		}
@@ -130,5 +130,25 @@ export const LangPopup = {
 				await this.switchLang(lang.innerText);
 			}.bind(this))
 		}
+	},
+}
+
+export const DescInput = {
+	__proto__: BasePopup,
+	button_selector: '.profile .details .buttons .edit',
+	window_selector: '.descInput',
+
+	createPopup: function() {
+		let popup = `
+		<dialog class="descInput modalWrapper">
+			<form class="modal">
+				<div class='title'>Enter description</div>
+				<input type='text' title='Desctiption'></input>
+				<div class='tip'></div>
+				<button>accept</button>
+			</form>
+		</dialog>
+		`
+		this.popup = popup
 	},
 }

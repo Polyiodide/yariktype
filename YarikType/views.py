@@ -52,12 +52,16 @@ def list_users(request):
     match time:
         case '15':
             mode = 'record_first'
+            array = models.User.objects.filter(record_first__gt=0).order_by(mode)
         case '30':
             mode = 'record_second'
+            array = models.User.objects.filter(record_second__gt=0).order_by(mode)
         case '60':
             mode = 'record_third'
+            array = models.User.objects.filter(record_third__gt=0).order_by(mode)
         case '120':
             mode = 'record_fourth'
+            array = models.User.objects.filter(record_fourth__gt=0).order_by(mode)
         case _:
             raise PermissionDenied()
 
@@ -143,6 +147,7 @@ class RegisterView(ContextView):
                 return HttpResponse('wrong password')
 
             user = models.User(username=form.cleaned_data['username'],
+                               email=form.cleaned_data['email'],
                                password=form.cleaned_data['password']
             )
             user.save()

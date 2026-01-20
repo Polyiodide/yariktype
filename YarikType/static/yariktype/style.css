@@ -290,10 +290,18 @@ main {
 }
 
 .modalWrapper .modal {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 2rem;
 	background: var(--bg-color);
 	border: 2px solid var(--main-color);
 	border-radius: 0.5rem;
 	opacity: 1;
+}
+
+#commandLine .modal {
+	padding: 0;
 }
 
 .modalWrapper .modal .suggestions > div {
