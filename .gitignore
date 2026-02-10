@@ -1,4 +1,2 @@
-db.sqlite3
-.gitignore
-YarikType/__pycache__
-kurs/__pycache__
+*.sqlite3
+__pycache__/
