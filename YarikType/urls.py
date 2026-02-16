@@ -15,4 +15,5 @@ urlpatterns = [
     path('list_themes', views.list_themes),
     path('list_dicts', views.list_dictionaries),
     path('list_users', views.list_users),
+    path('update_records', views.update_records),
 ]

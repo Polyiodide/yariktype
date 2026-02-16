@@ -8,10 +8,10 @@ class User(models.Model):
     creation_date = models.DateField(auto_now_add=True)
     description = models.CharField(max_length=200, blank=True)
 
-    record_first = models.FloatField(default=0)
-    record_second = models.FloatField(default=0)
-    record_third = models.FloatField(default=0)
-    record_fourth = models.FloatField(default=0)
+    record_first = models.IntegerField(default=0)
+    record_second = models.IntegerField(default=0)
+    record_third = models.IntegerField(default=0)
+    record_fourth = models.IntegerField(default=0)
 
 
     def slug(self):

@@ -1,18 +1,44 @@
 import { TimeInput, LangPopup } from "./popups.js"
+
 let line = [];
 let words;
 let cur_word = 0;
 let cur_letter = 0;
 let total = 0;
 let wrong = 0;
+let time = 30;
+let Timer;
+let started = false;
+
+let language = 'english'
+
+let config
+
 const word_delete = 1;
 const words_field = document.getElementById('words');
 const typingTest = document.getElementById('typingTest');
 const input = document.getElementById('wordsInput');
 const lang_button = document.querySelector('.languages button')
-let time = 30;
-let Timer;
-let started = false;
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
 
 function generate_words(amount) {
 	let word
@@ -43,21 +69,39 @@ function next_line() {
 	}
 }
 
-function startTimer() {
-	//get time to count down
-	//document.querySelector()
-	Timer = setTimeout(() => {
-		started = false;
-		typingTest.classList.add('hidden');
-		console.log(total, wrong);
-		//endPopup();
-	}, time*1000)
+async function sendResult() {
+        let cpm = (total - wrong) * 60/time
+        const result = {
+                'charTotal': total,
+                'language': language,
+                'mode': 'time',
+                'mode2': time,
+                'cpm': cpm,
+        }
+
+	const response = await fetch('/update_records', {
+                method: "POST",
+                credentials: 'same-origin',
+                    headers:{
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify(result)
+        });
+}
+
+function endTest() {
+        started = false;
+        typingTest.classList.add('hidden');
+        sendResult()
+        //endPopup();
 }
 
 function logKey(e) {
 	if (!started) {
 		started = true;
-		startTimer();
+                Timer = setTimeout(endTest, time*1000)
 	}
 	let letter
 	if (e.key.length === 1 && e.key !== ' ') {
@@ -103,7 +147,7 @@ function handleConfigButtonClick(event) {
 
 	event.target.classList.add('active')
 	if (event.target.innerText !== 'custom') {
-		time = parseInt(event.target.innerText);
+		time = parseInt(event.target.getAttribute('timeconfig'))
 	}
 }
 
@@ -115,17 +159,20 @@ async function switchLang(lang) {
 	for (const word of line) {
 		word.remove();
 	}
+
 	total = 0;
 	wrong = 0;
 	clearTimeout(Timer);
 
 	localStorage.setItem('dict', lang);
+
 	let data;
 	data = await fetch('/languages/'+lang+'.json');
 	data = await data.json();
 	words = data['words'];
 	generate_words(150);
 
+        language = lang
 	lang_button.innerText = lang;
 	input.focus();
 }
@@ -156,6 +203,8 @@ async function init() {
 		input.focus();
 	});
 
+        //config = JSON.parse(localStorage.getItem('config'))
+        //console.log(config)
 
 	TimeInput.init();
 

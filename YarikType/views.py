@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from . import forms
 from . import models
 from os import listdir
+import json
 
 # Create your views here.
 
@@ -44,6 +45,44 @@ def list_dictionaries(request):
 def dictionary(request, slug):
     return FileResponse(open('YarikType/static/yariktype/dictionaries/'+slug, "rb"))
 
+def update_records(request):
+    if request.method != "POST":
+        raise PermissionDenied()
+
+    state = True
+
+    user = request.session.get('user', None)
+    if not user: 
+        state = False
+
+    if state:
+        result = json.load(request)
+        time = result['mode2']
+        cpm = result['cpm']
+
+        user = models.User.objects.get(username=user['username'])
+
+        print(result)
+        match time:
+            case 15:
+                user.record_first = cpm
+            case 30:
+                user.record_second = cpm
+            case 60:
+                user.record_third = cpm
+            case 120:
+                user.record_fourth = cpm
+            case _:
+                state = False
+
+    if state:
+        user.save()
+
+    data = {
+            'state': int(state),
+    }
+    return JsonResponse(data)
+    
 def list_users(request):
     if 'time' not in request.GET:
         raise PermissionDenied()
@@ -52,23 +91,22 @@ def list_users(request):
     match time:
         case '15':
             mode = 'record_first'
-            array = models.User.objects.filter(record_first__gt=0).order_by(mode)
+            array = models.User.objects.filter(record_first__gt=0).order_by('-record_first')
         case '30':
             mode = 'record_second'
-            array = models.User.objects.filter(record_second__gt=0).order_by(mode)
+            array = models.User.objects.filter(record_second__gt=0).order_by('-record_second')
         case '60':
             mode = 'record_third'
-            array = models.User.objects.filter(record_third__gt=0).order_by(mode)
+            array = models.User.objects.filter(record_third__gt=0).order_by('-record_third')
         case '120':
             mode = 'record_fourth'
-            array = models.User.objects.filter(record_fourth__gt=0).order_by(mode)
+            array = models.User.objects.filter(record_fourth__gt=0).order_by('-record_fourth')
         case _:
             raise PermissionDenied()
 
     data = {'users':[]}
-    array = models.User.objects.all().order_by(mode)
     for idx, user in enumerate(array):
-        data['users'].append({'wpm': user.record_first, 'username': user.username})
+        data['users'].append({'cpm': user.record_first, 'username': user.username})
     return JsonResponse(data)
 
 class AppView(ContextView):
@@ -92,7 +130,7 @@ class ProfileView(ContextView):
     def get(self, request, slug):
         profile = get_object_or_404(models.User, username=slug)
         self.extra_context['profile'] = profile
-
+        print(profile.record_first)
         return super().get(request)
 
 @login_req
@@ -161,4 +199,3 @@ class RegisterView(ContextView):
             return redirect('index')
         self.extra_context['form'] = form
         return self.get(request)
-

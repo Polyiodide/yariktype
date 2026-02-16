@@ -3,14 +3,15 @@ const tbody = document.querySelector('.leaderboardsPage .table table tbody');
 async function createTable(time) {
 	const users = (await getlist(time))['users'];
 	let table = '';
-	for (const idx of users) {
+        for (let i=0; i<users.length; i++) {
+                let idx = users[i]
 		table += `<tr>
-				<td>1</td>
+				<td>${i+1}</td>
 				<td class='avatarName'>
 					<div class='avatar'></div>
 					<a href='/profile/${idx['username']}'>${idx['username']}</a>
 				</td>
-				<td>${idx['wpm']}</td>
+				<td>${idx['cpm']}</td>
 				<td>100%</td>
 			</tr>`;
 	}
