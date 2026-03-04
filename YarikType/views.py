@@ -50,13 +50,15 @@ def update_records(request):
         raise PermissionDenied()
 
     state = True
+    result = json.load(request)
+    if result['language'] != 'english':
+          state = False
 
     user = request.session.get('user', None)
     if not user: 
         state = False
 
     if state:
-        result = json.load(request)
         time = result['mode2']
         cpm = result['cpm']
 

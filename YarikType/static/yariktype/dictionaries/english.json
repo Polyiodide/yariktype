@@ -201,5 +201,7 @@
     "change",
     "help",
     "line"
-  ]
+  ],
+  "shuffle": true,
+  "time": true
 }

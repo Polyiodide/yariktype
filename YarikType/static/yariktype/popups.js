@@ -72,7 +72,8 @@ export const ThemePopup = {
 		const suggestions = document.querySelector('#popups .suggestions').children;
 		for (const theme of suggestions) {
 			theme.addEventListener('click', function () {
-				this.switchTheme(theme.innerText)
+				this.switchTheme(theme.innerText);
+                                this.remove();
 			}.bind(this))
 		}
 	},
@@ -82,20 +83,32 @@ export const TimeInput = {
 	__proto__: BasePopup,
 	button_selector: '#config .row .time button[timeconfig="custom"]',
 	window_selector: '.timeInput',
+        current_test: null,
 
 	createPopup: function() {
 		let popup = `
 		<dialog class="timeInput modalWrapper">
-			<form class="modal">
+			<div class="modal">
 				<div class='title'>Test duration</div>
 				<input value='30' title='test duration' min='0'></input>
 				<div class='tip'></div>
 				<button>accept</button>
-			</form>
+			</div>
 		</dialog>
 		`
 		this.popup = popup
 	},
+
+        onShow: function() {
+                const button = document.querySelector('#popups .timeInput button');
+
+                button.addEventListener('click', async function () {
+                        const time = document.querySelector('#popups .timeInput input').value;
+                        this.current_test.time = parseInt(time);
+                        this.remove();
+                        console.log(this.current_test);
+                }.bind(this))
+        },
 }
 
 export const LangPopup = {
@@ -128,6 +141,7 @@ export const LangPopup = {
 		for (const lang of suggestions) {
 			lang.addEventListener('click', async function () {
 				await this.switchLang(lang.innerText);
+                                this.remove();
 			}.bind(this))
 		}
 	},
