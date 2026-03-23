@@ -67,13 +67,13 @@ def update_records(request):
         print(result)
         match time:
             case 15:
-                user.record_first = cpm
+                user.record_first = max(user.record_first, cpm)
             case 30:
-                user.record_second = cpm
+                user.record_second = max(user.record_second, cpm)
             case 60:
-                user.record_third = cpm
+                user.record_third = max(user.record_third, cpm)
             case 120:
-                user.record_fourth = cpm
+                user.record_fourth = max(user.record_fourth, cpm)
             case _:
                 state = False
 
@@ -108,7 +108,7 @@ def list_users(request):
 
     data = {'users':[]}
     for idx, user in enumerate(array):
-        data['users'].append({'cpm': user.record_first, 'username': user.username})
+        data['users'].append({'cpm': eval(f'user.{mode}'), 'username': user.username})
     return JsonResponse(data)
 
 class AppView(ContextView):
@@ -120,8 +120,8 @@ class LeaderboardsView(ContextView):
 class SettingsView(ContextView):
     template_name = 'yariktype/settings.html'
 
-class TestView(ContextView):
-    template_name = 'yariktype/test.html'
+class HelpView(ContextView):
+    template_name = 'yariktype/help.html'
 
     def get(self, request):
         print(self.extra_context)
@@ -154,10 +154,10 @@ class LoginView(ContextView):
             if not models.User.objects.filter(email=form.cleaned_data['email']):
                 return HttpResponse('no such user')
 
-            if models.User.objects.get(email=form.cleaned_data['email']).password != form.cleaned_data['password']:
-                return HttpResponse('wrong password')
-
             user = models.User.objects.get(email=form.cleaned_data['email'])
+
+            if user.password != form.cleaned_data['password']:
+                return HttpResponse('wrong password')
 
             user = {
                 'username': user.username
@@ -185,6 +185,12 @@ class RegisterView(ContextView):
 
             if form.cleaned_data['password'] != form.cleaned_data['verify_password']:
                 return HttpResponse('wrong password')
+
+            if User.objects.filter(username=form.cleaned_data['username']):
+                return HttpResponse('username already taken')
+
+            if User.objects.filter(email=form.cleaned_data['email']):
+                return HttpResponse('email already exists')
 
             user = models.User(username=form.cleaned_data['username'],
                                email=form.cleaned_data['email'],

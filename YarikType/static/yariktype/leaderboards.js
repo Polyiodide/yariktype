@@ -40,7 +40,9 @@ function handleButtonActive() {
 
 function init() {
 	handleButtonActive();
-	createTable(15)
+        document.quertSelector('.buttons button[mode="30"]').click();
+        createTable(30);
+
 }
 
 window.onloadFuncs.push(init);
