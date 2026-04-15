@@ -5,14 +5,14 @@ const BasePopup = {
 	window_selector: null,
 	isopen: false,
 
-	init() {
+	init: function() {
 		this.popup_menu = document.querySelector('#popups')
 		document.querySelector(this.button_selector).addEventListener('click', function() {this.show()}.bind(this));
 		this.createPopup();
 	},
 
-	onShow() {},
-	show() {
+        onShow: function() {},
+	show: function() {
 		if (this.isopen) {
 			return
 		}
@@ -23,14 +23,14 @@ const BasePopup = {
 
 		document.querySelector(this.window_selector).addEventListener('click', function(event) {
 			if(event.target !== event.currentTarget) return;
-			this.remove()
+			this.remove();
 		}.bind(this));
 
 		this.isopen = true;
 	},
 
-	onRemove() {},
-	remove() {
+        onRemove: function() {},
+	remove: function() {
 		if (!this.isopen) {
 			return
 		}
@@ -155,14 +155,53 @@ export const DescInput = {
 	createPopup: function() {
 		let popup = `
 		<dialog class="descInput modalWrapper">
-			<form class="modal">
+			<div class="modal">
 				<div class='title'>Enter description</div>
-				<input type='text' title='Desctiption'></input>
+				<input type='text' title='Description'></input>
 				<div class='tip'></div>
 				<button>accept</button>
-			</form>
+			</div>
 		</dialog>
 		`
 		this.popup = popup
 	},
+}
+
+export const WordsInput = {
+	__proto__: BasePopup,
+	button_selector: '#wordsInputButton',
+	window_selector: '.wordsInput',
+	changeTest: null,
+
+        onShow: function() {
+                document.querySelector(this.window_selector+' .modal button').addEventListener('click', function() {
+                        this.onAccept();
+		}.bind(this))
+        },
+
+	createPopup: function() {
+		let popup = `
+		<dialog class="wordsInput modalWrapper">
+			<div class="modal">
+				<div class='title'>Enter words separated by space</div>
+				<input type='text' title='Words'></input>
+				<div class='tip'></div>
+				<button>accept</button>
+			</div>
+		</dialog>
+		`
+		this.popup = popup;
+	},
+
+        onAccept: function() {
+                let words = document.querySelector(this.window_selector + ' input').value.split(' ');
+                let data = {
+                        name: 'custom',
+                        shuffle: true,
+                        time: true,
+                        words: words
+                }
+                this.changeTest(data);
+                this.remove();
+        }
 }

@@ -1,5 +1,4 @@
-import { TimeInput, LangPopup } from "./popups.js"
-
+import { TimeInput, LangPopup, WordsInput } from "./popups.js"
 let current_test = null;
 const word_delete = 1;
 const words_field = document.getElementById('words');
@@ -192,13 +191,6 @@ function loadFontSize() {
 }
 
 async function switchLang(lang) {
-        if (current_test !== null) {
-                for (const word of current_test.line) {
-                        word.remove();
-                }
-        }
-	//clearTimeout(Timer);
-
 	localStorage.setItem('dict', lang);
 
 	let data;
@@ -206,6 +198,17 @@ async function switchLang(lang) {
 	data = await data.json();
 
         console.log(data);
+        changeTest(data);
+
+	lang_button.innerText = lang;
+}
+
+function changeTest(data) {
+        if (current_test !== null) {
+                for (const word of current_test.line) {
+                        word.remove();
+                }
+        }
 
         let time
         if (data['time'] === false) {
@@ -216,8 +219,6 @@ async function switchLang(lang) {
         }
 
         current_test = new Test(data['name'], data['words'], time, data['shuffle']);
-	lang_button.innerText = lang;
-	input.focus();
 }
 
 async function loadAlph() {
@@ -234,8 +235,7 @@ async function init() {
 	buttons.forEach(button => {button.addEventListener('click', handleConfigButtonClick)})
 
 	input.addEventListener('focus', function () {
-			words_field.classList.remove('blurred')
-	})
+			words_field.classList.remove('blurred') })
 	input.addEventListener('focusout', function () {
 			words_field.classList.add('blurred')
 	})
@@ -253,6 +253,9 @@ async function init() {
 
 	LangPopup.switchLang = switchLang;
 	LangPopup.init();
+
+        WordsInput.init();
+        WordsInput.changeTest = changeTest;
 
 	loadFontSize();
 
