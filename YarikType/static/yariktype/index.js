@@ -7,6 +7,7 @@ const main = typingTest.parentElement;
 const input = document.getElementById('wordsInput');
 const lang_button = document.querySelector('.languages button')
 
+
 class Test {
         started = false;
         cur_word = 0;
@@ -149,7 +150,7 @@ const csrftoken = getCookie('csrftoken');
 function showResult(result) {
         typingTest.classList.add('hidden');
 
-        const html = `<div id="result"><div class="stats"><div class="cpm"><div class="top"><div class="text">cpm</div></div><div class="bottom">${result['charTotal']}</div></div></div><div class="stats detailedstats"><div class="testType"><div class="top"><div>test type</div></div><div class="bottom">${result['mode']} ${result['mode2']}<br>${result['language']}</div></div><div class="chars"><div class="top"><div>characters</div></div><div class="bottom" aria-label="correct/incorrect">${result['charTotal']-result['charIncorrect']}/${result['charIncorrect']}</div></div><div class="testTime"><div class="top"><div>time</div></div><div class="bottom">${result['mode2']}</div></div></div>`
+        const html = `<div id="result"><div class="stats"><div class="cpm"><div class="top"><div class="text">cpm</div></div><div class="bottom" aria-label="char per minute">${result['charTotal']}</div></div></div><div class="stats detailedstats"><div class="testType"><div class="top"><div>test type</div></div><div class="bottom">${result['mode']} ${result['mode2']}<br>${result['language']}</div></div><div class="chars"><div class="top"><div>characters</div></div><div class="bottom" aria-label="correct/incorrect">${result['charTotal']-result['charIncorrect']}/${result['charIncorrect']}</div></div><div class="testTime"><div class="top"><div>time</div></div><div class="bottom">${result['mode2']}</div></div></div>`
         main.innerHTML += html;
 }
 
@@ -186,10 +187,6 @@ function handleConfigButtonClick(event) {
 	}
 }
 
-function loadFontSize() {
-	typingTest.style['font-size'] = localStorage.getItem('fontSize')+'rem';
-}
-
 async function switchLang(lang) {
 	localStorage.setItem('dict', lang);
 
@@ -197,7 +194,6 @@ async function switchLang(lang) {
 	data = await fetch(`/languages/${lang}.json`);
 	data = await data.json();
 
-        console.log(data);
         changeTest(data);
 
 	lang_button.innerText = lang;
@@ -221,7 +217,12 @@ function changeTest(data) {
         current_test = new Test(data['name'], data['words'], time, data['shuffle']);
 }
 
-async function loadAlph() {
+async function loadFromLocalStorage() {
+        const fontsize = localStorage.getItem('fontSize')+'rem';
+        if (fontsize) {
+                typingTest.style['font-size'] = fontsize+'rem';
+        }
+
 	let lang = localStorage.getItem('dict')
 	if (!lang) {
 		localStorage.setItem('dict', 'english')
@@ -246,7 +247,8 @@ async function init() {
         //config = JSON.parse(localStorage.getItem('config'))
         //console.log(config)
 
-	await loadAlph();
+
+        await loadFromLocalStorage();
 
 	TimeInput.init();
         TimeInput.current_test = current_test;
@@ -256,8 +258,6 @@ async function init() {
 
         WordsInput.init();
         WordsInput.changeTest = changeTest;
-
-	loadFontSize();
 
 	input.addEventListener('keydown', function () {
 		current_test.logKey(event)

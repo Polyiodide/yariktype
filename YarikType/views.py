@@ -45,6 +45,9 @@ def list_dictionaries(request):
 def dictionary(request, slug):
     return FileResponse(open('YarikType/static/yariktype/dictionaries/'+slug, "rb"))
 
+def font(request, slug):
+    return FileResponse(open('YarikType/static/yariktype/webfonts/'+slug, "rb"))
+
 def update_records(request):
     if request.method != "POST":
         raise PermissionDenied()
@@ -122,10 +125,6 @@ class SettingsView(ContextView):
 
 class HelpView(ContextView):
     template_name = 'yariktype/help.html'
-
-    def get(self, request):
-        print(self.extra_context)
-        return super().get(request)
 
 class ProfileView(ContextView):
     template_name = 'yariktype/profile.html'

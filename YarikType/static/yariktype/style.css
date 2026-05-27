@@ -531,3 +531,24 @@ input[type='submit']:hover {
 	color: var(--text-color);
 	opacity: 0.75;
 }	
+
+@font-face {
+        font-family: "Roboto";
+        src: url('webfonts/Roboto-Regular.ttf');
+        font-weight: normal;
+        font-style: normal;
+}
+
+@font-face {
+        font-family: "Roboto Mono";
+        src: url('webfonts/RobotoMono-Regular.ttf');
+        font-weight: normal;
+        font-style: normal;
+}
+
+@font-face {
+        font-family: "Source Code Pro";
+        src: url('webfonts/SourceCodePro-Regular.ttf');
+        font-weight: normal;
+        font-style: normal;
+}

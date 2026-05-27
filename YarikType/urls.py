@@ -12,6 +12,7 @@ urlpatterns = [
     path('register', views.RegisterView.as_view(), name='register'),
     path('logout', views.logout, name='logout'),
     path('languages/<str:slug>', views.dictionary),
+    path('webfonts/<str:slug>', views.font),
     path('list_themes', views.list_themes),
     path('list_dicts', views.list_dictionaries),
     path('list_users', views.list_users),

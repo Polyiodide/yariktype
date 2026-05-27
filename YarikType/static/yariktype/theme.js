@@ -7,6 +7,14 @@ function switchTheme(theme) {
 	document.querySelector('.themeChanger .text').innerText = theme;
 }
 
+function loadFontSize() {
+        const fontfamily = localStorage.getItem('fontFamily')
+        if (Number.isNaN(fontfamily)) {
+                return;
+        }
+        document.documentElement.style.cssText = '--font: ' + fontfamily + ', "Roboto Mono", "Vazirmatn", monospace;';
+}
+
 function init() {
 	let theme = localStorage.getItem('theme')
 
@@ -15,10 +23,12 @@ function init() {
 		localStorage.setItem('theme', 'classic')
 		theme = 'classic'
 	}	
-	switchTheme(theme)
+	switchTheme(theme);
 
-	ThemePopup.switchTheme = switchTheme
-	ThemePopup.init()
+	ThemePopup.switchTheme = switchTheme;
+	ThemePopup.init();
+
+        loadFontSize();
 
 	console.log('theme changer loaded')
 }
