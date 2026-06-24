@@ -88,6 +88,27 @@ def update_records(request):
     }
     return JsonResponse(data)
     
+def update_description(request):
+    if request.method != "POST":
+        raise PermissionDenied()
+
+    state = True
+    result = json.load(request)
+    user = request.session.get('user', None)
+
+    if not user: 
+        state = False
+
+    if state:
+        user = models.User.objects.get(username=user['username'])
+        user.description = result['value']
+        user.save()
+
+    data = {
+            'state': int(state),
+    }
+    return JsonResponse(data)
+
 def list_users(request):
     if 'time' not in request.GET:
         raise PermissionDenied()
@@ -185,10 +206,10 @@ class RegisterView(ContextView):
             if form.cleaned_data['password'] != form.cleaned_data['verify_password']:
                 return HttpResponse('wrong password')
 
-            if User.objects.filter(username=form.cleaned_data['username']):
+            if models.User.objects.filter(username=form.cleaned_data['username']):
                 return HttpResponse('username already taken')
 
-            if User.objects.filter(email=form.cleaned_data['email']):
+            if models.User.objects.filter(email=form.cleaned_data['email']):
                 return HttpResponse('email already exists')
 
             user = models.User(username=form.cleaned_data['username'],

@@ -39,13 +39,22 @@ function loadSection(local_var, selector) {
 }
 
 function loadFontSize() {
-        const [val, objects] = loadSection('fontSize', "div[data-config-name='fontSize'] .sectionBody .inputs input")
+        const result = loadSection('fontSize', "div[data-config-name='fontSize'] .sectionBody .inputs input")
+        if (!result) {
+                return
+        }
+
+        const [val, objects] = result
         objects[0].value = val;
 }
 
 function loadFontFamily() {
-        const [val, objects] = loadSection('fontFamily', "div[data-config-name='fontFamily'] .sectionBody .buttons button");
+        const result = loadSection('fontFamily', "div[data-config-name='fontFamily'] .sectionBody .buttons button");
+        if (!result) {
+                return
+        }
 
+        const [val, objects] = result
         for (let i=0; i<objects.length; i++) {
                 obj = objects[i]
                 if (obj.getAttribute('data-config-value') === val) {

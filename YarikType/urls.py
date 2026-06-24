@@ -17,4 +17,6 @@ urlpatterns = [
     path('list_dicts', views.list_dictionaries),
     path('list_users', views.list_users),
     path('update_records', views.update_records),
+    path('update_description', views.update_description),
+    path('app/', lambda _: redirect('/')),
 ]

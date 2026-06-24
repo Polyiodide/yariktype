@@ -220,9 +220,8 @@ function changeTest(data) {
 async function loadFromLocalStorage() {
         const fontsize = localStorage.getItem('fontSize')+'rem';
         if (fontsize) {
-                typingTest.style['font-size'] = fontsize+'rem';
+                typingTest.style['font-size'] = fontsize;
         }
-
 	let lang = localStorage.getItem('dict')
 	if (!lang) {
 		localStorage.setItem('dict', 'english')

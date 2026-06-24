@@ -216,30 +216,30 @@ main {
 #result .stats .top {
 	color: var(--untyped-color);
 	font-size: 2rem;
-    line-height: 2rem;
+        line-height: 2rem;
 }
 
 #result .stats .bottom {
 	color: var(--main-color);
 	font-size: 4rem;
-    line-height: 4rem;
+        line-height: 4rem;
 }
 
 #result .detailedstats .top {
 	color: var(--untyped-color);
 	font-size: 1rem;
-    line-height: 1rem;
+        line-height: 1rem;
 }
 
 #result .detailedstats .testType .bottom {
-	font-size: 1rem;
-    line-height: 1rem;
+        font-size: 1rem;
+        line-height: 1rem;
 }
 
 #result .detailedstats .bottom {
-	color: var(--main-color);
-	font-size: 2rem;
-    line-height: 2rem;
+        color: var(--main-color);
+        font-size: 2rem;
+        line-height: 2rem;
 }
 
 #words {

@@ -100,10 +100,10 @@ export const TimeInput = {
 	},
 
         onShow: function() {
-                const button = document.querySelector('#popups .timeInput button');
+                const button = document.querySelector(`#popups ${this.window_selector} button`);
 
                 button.addEventListener('click', async function () {
-                        const time = document.querySelector('#popups .timeInput input').value;
+                        const time = document.querySelector(`#popups ${this.window_selector} input`).value;
                         this.current_test.time = parseInt(time);
                         this.remove();
                         console.log(this.current_test);
@@ -151,6 +151,7 @@ export const DescInput = {
 	__proto__: BasePopup,
 	button_selector: '.profile .details .buttons .edit',
 	window_selector: '.descInput',
+        csrftoken: null,
 
 	createPopup: function() {
 		let popup = `
@@ -165,6 +166,26 @@ export const DescInput = {
 		`
 		this.popup = popup
 	},
+
+        onShow: function() {
+                const button = document.querySelector(`#popups ${this.window_selector} button`);
+
+                button.addEventListener('click', async function () {
+                        const new_desc = document.querySelector(`#popups ${this.window_selector} input`).value;
+                        const data = {'value': new_desc}
+                        fetch('/update_description', {
+                                method: "POST",
+                                credentials: 'same-origin',
+                                    headers:{
+                                        'Accept': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'X-CSRFToken': this.csrftoken,
+                                },
+                                body: JSON.stringify(data)
+                        });
+                        this.remove();
+                }.bind(this))
+        },
 }
 
 export const WordsInput = {
